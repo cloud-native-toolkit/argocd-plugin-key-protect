@@ -7,10 +7,10 @@ import (
 )
 
 type Secret struct {
-	ApiVersion string
-	Kind string
-	Metadata metadata.Metadata
-	Values map[string]string
+	ApiVersion string `yaml:"apiVersion"`
+	Kind       string
+	Metadata   metadata.Metadata
+	Data       map[string]string
 }
 
 func New(metadata metadata.Metadata, values map[string]string) Secret {
