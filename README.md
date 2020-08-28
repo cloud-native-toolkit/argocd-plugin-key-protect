@@ -55,14 +55,13 @@ spec:
 
 ### ArgoCD flow
 
-Assuming the plugin has been installed and a secret containing the credentials required to access Key Protect has been 
-created, the flow for ArgoCD would be as follows:
+Assuming the [ArgoCD setup](#setting-up-argocd) has been completed for the plugin, the flow for ArgoCD would be as follows:
 
 1. Create a directory in your GitOps repository for each set of secrets that must be deployed
 2. Create a SecretTemplate yaml file for each Secret with the appropriate values
 3. In ArgoCD, configure an Application for each secret directory created:
 
-    - Provide the standard values for the **General**, **Source**, and **Destination* sections. The `path` in the **Source** section should refer to the directory containing the SecretTemplates
+    - Provide the standard values for the **General**, **Source**, and **Destination** sections. The `path` in the **Source** section should refer to the directory containing the SecretTemplates
     - Select `Plugin` from the dropdown in the section at the bottom
     - Select `key-protect-secret` for the plugin name
 
