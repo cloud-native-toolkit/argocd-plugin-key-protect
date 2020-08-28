@@ -55,6 +55,40 @@ spec:
     - `b64value` - a base64 encoded value can be provided to the secret. This can be used for large values that might present formatting issues or for information that is not sensitive but that might be obfuscated a bit (like a username)
     - `keyId` - the id (not the name) of the Standard Key that has been stored in Key Protect. The value stored in Key Protect can be anything
 
+### Managing keys in Key Protect
+
+Key Protect manages two different types of keys: `root keys` and `standard keys`. `Standard keys` are used to store any
+kind of protected information. The Key Protect plugin reads the contents of a standard key, identified by a given key id, and
+stores the key value into a secret in the cluster.
+
+The following steps describe how to create a standard key:
+
+1. Open the IBM Cloud console and navigate to the Key Protect service
+
+2. Within Key Protect, select the **Manage Keys** tab
+
+3. Press the `Add key` button to open the "Add a new key" dialog
+
+4. Select the `Import your own key` radio button and `Standard key` from the drop down
+
+5. Provide a descriptive name for the key and paste the base-64 encoded value of the key into the `Key material` field
+
+    **Note:** A value can be encoded as base-64 from the terminal with the following command:
+    
+    ```shell script
+    echo -n "{VALUE}" | base64
+    ```
+   
+    If you need to encode a larger value, create the value in a file and encode the entire contents of the file with:
+    
+    ```shell script
+    cat {file} | base64
+    ```
+
+6. Click **Import key** to create the key
+
+7. Copy the value of the **ID**. This will be used later by the plugin
+
 ### Configuring an ArgoCD application
 
 Assuming the [ArgoCD setup](#setting-up-argocd) has been completed for the plugin, the flow for ArgoCD would be as follows:
