@@ -23,7 +23,9 @@ for the provided keyIds from Key Protect, and generates a kubernetes Secret for 
 
 ### Secret template
 
-The input to the plugin is a directory that contains one or many secret templates with the following format:
+The input to the plugin is a directory that contains one or more "secret templates". In this case the "secret template" provides the 
+structure of the desired template with placeholders for the values that will be pulled from the key management system. The following
+provides the structure of the template:
 
 ```yaml
 apiVersion: keymanagement.ibm/v1
@@ -53,17 +55,20 @@ spec:
     - `b64value` - a base64 encoded value can be provided to the secret. This can be used for large values that might present formatting issues or for information that is not sensitive but that might be obfuscated a bit (like a username)
     - `keyId` - the id (not the name) of the Standard Key that has been stored in Key Protect. The value stored in Key Protect can be anything
 
-### ArgoCD flow
+### Configuring an ArgoCD application
 
 Assuming the [ArgoCD setup](#setting-up-argocd) has been completed for the plugin, the flow for ArgoCD would be as follows:
 
-1. Create a directory in your GitOps repository for each set of secrets that must be deployed
-2. Create a SecretTemplate yaml file for each Secret with the appropriate values
+1. Create a directory in your GitOps repository for the secrets
+2. Create a SecretTemplate yaml file in the directory for each Secret with the appropriate values
 3. In ArgoCD, configure an Application for each secret directory created:
 
     - Provide the standard values for the **General**, **Source**, and **Destination** sections. The `path` in the **Source** section should refer to the directory containing the SecretTemplates
     - Select `Plugin` from the dropdown in the section at the bottom
     - Select `key-protect-secret` for the plugin name
+
+Multiple directories can be defined within the GitOps repository to support whatever level of granularity is
+desired for managing the secrets. Currently only one Key Protect instance is supported for a single ArgoCD instance.
 
 ## Setting up ArgoCD
 
@@ -206,3 +211,15 @@ export REGION={Key Protect region}
 export KP_INSTANCE_ID={Key Protect instance id}
 ./bin/generate-secrets
 ```
+
+### Publishing
+
+The repository has been configured to use GitHub Actions to automate the build and release cycle. To release
+a new version of the plugin, do the following:
+
+1. Make your changes in a branch
+2. Create a Pull Request with your changes. Be sure to add a change type label (`feature`, `bug`, or `chore`) to the PR
+as well as a version label (`major`, `minor`, or `patch`)
+3. If the build runs successfully and the changes look good, merge the PR. Pushing to master kicks off a chain of two other Actions:
+    - The changes in master will be verified and, if passing, a release will be created
+    - When the release is published, the changes will be built and published as assets on the release
