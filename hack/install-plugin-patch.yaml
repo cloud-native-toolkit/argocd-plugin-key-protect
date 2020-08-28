@@ -1,0 +1,6 @@
+spec:
+  configManagementPlugins: |
+    - name: key-protect-secret
+      generate:
+        command: ["/key-protect/generate-secrets"]
+        args: []

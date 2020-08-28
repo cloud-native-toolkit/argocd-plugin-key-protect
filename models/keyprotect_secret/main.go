@@ -13,11 +13,17 @@ type SecretValue struct {
 	KeyId string `yaml:"keyId,omitempty"`
 }
 
+type SecretSpec struct {
+	Labels map[string]string `yaml:"labels,omitempty"`
+	Annotations map[string]string `yaml:"annotations,omitempty"`
+	Values []SecretValue
+}
+
 type Secret struct {
 	ApiVersion string
 	Kind string
 	Metadata metadata.Metadata
-	Spec []SecretValue
+	Spec SecretSpec
 }
 
 func FromYaml(data []byte) Secret {

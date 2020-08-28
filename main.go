@@ -19,10 +19,15 @@ func main() {
 		Name: "generate-secret",
 		Usage: "Generates secrets populated with values from Key Protect",
 		Version: version,
+		ArgsUsage: "[path]",
 		Action: func(c *cli.Context) error {
 			path, err := os.Getwd()
 			if err != nil {
 				panic(err)
+			}
+
+			if c.Args().Len() > 0 {
+				path = c.Args().Get(0)
 			}
 
 			result := generate_secrets_from_files.GenerateSecretsFromFiles(path)
