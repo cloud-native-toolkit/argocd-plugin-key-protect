@@ -1,0 +1,61 @@
+[{
+  "op": "add",
+  "path": "/spec/template/spec/volumes/0",
+  "value": {
+    "name": "key-protect-install",
+    "emptyDir": {}
+  }
+}, {
+  "op": "add",
+  "path": "/spec/template/spec/initContainers/0",
+  "value": {
+    "name": "key-protect-install",
+    "image": "curlimages/curl",
+    "volumeMounts": [{
+      "name": "key-protect-install",
+      "mountPath": "/key-protect"
+    }],
+    "command": ["sh", "-c"],
+    "args": [
+      "curl -Lo /tmp/jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 && chmod +x /tmp/jq && LATEST_RELEASE=$(curl -Ls https://api.github.com/repos/ibm-garage-cloud/argocd-plugin-key-protect/releases/latest | /tmp/jq -r '.tag_name') && curl -Lo /key-protect/generate-secrets https://github.com/ibm-garage-cloud/argocd-plugin-key-protect/releases/download/${LATEST_RELEASE}/generate-secrets && chmod +x /key-protect/generate-secrets"
+    ]
+  }
+}, {
+  "op": "add",
+  "path": "/spec/template/spec/containers/0/volumeMounts/0",
+  "value": {
+    "name": "key-protect-install",
+    "mountPath": "/key-protect"
+  }
+}, {
+  "op": "add",
+  "path": "/spec/template/spec/containers/0/env",
+  "value": [{
+    "name": "KP_INSTANCE_ID",
+    "valueFrom": {
+      "secretKeyRef": {
+        "name": "key-protect-access",
+        "key": "instance-id",
+        "optional": true
+      }
+    }
+  }, {
+    "name": "REGION",
+    "valueFrom": {
+      "secretKeyRef": {
+        "name": "key-protect-access",
+        "key": "region",
+        "optional": true
+      }
+    }
+  }, {
+    "name": "API_KEY",
+    "valueFrom": {
+      "secretKeyRef": {
+        "name": "key-protect-access",
+        "key": "api-key",
+        "optional": true
+      }
+    }
+  }]
+}]

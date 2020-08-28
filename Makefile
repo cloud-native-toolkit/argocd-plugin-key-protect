@@ -34,6 +34,17 @@ build: go-build
 ## test: Tests the application
 test: go-test
 
+## compile: Compile the binary.
+compile:
+	@-touch $(STDERR)
+	@-rm $(STDERR)
+	@-$(MAKE) -s go-compile 2> $(STDERR)
+	@cat $(STDERR) | sed -e '1s/.*/\nError:\n/'  | sed 's/make\[.*/ /' | sed "/^/s/^/     /" 1>&2
+
+## clean: Clean build files. Runs `go clean` internally.
+clean:
+	@(MAKEFILE) go-clean
+
 help: Makefile
 	@echo " Choose a command run in "$(PROJECTNAME)":"
 	@sed -n 's/^##//p' $< | column -t -s ':' |  sed -e 's/^/ /'

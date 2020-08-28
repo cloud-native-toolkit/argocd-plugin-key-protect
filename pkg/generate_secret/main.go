@@ -3,6 +3,7 @@ package generate_secret
 import (
 	kpModel "argocd-plugin-key-protect/models/keyprotect_secret"
 	"argocd-plugin-key-protect/models/kubernetes"
+	"argocd-plugin-key-protect/models/metadata"
 	kp "argocd-plugin-key-protect/pkg/key_protect"
 	"encoding/base64"
 )
@@ -12,11 +13,12 @@ func GenerateSecret(kp kpModel.Secret) kubernetes.Secret {
 
 	values = make(map[string]string)
 
-	for _, kps := range kp.Spec {
+	specValues := kp.Spec.Values
+	for _, kps := range specValues {
 		values[kps.Name] = convertValue(kps)
 	}
 
-	return kubernetes.New(kp.Metadata, values)
+	return kubernetes.New(metadata.New(kp.Metadata.Name, kp.Spec.Labels, kp.Spec.Annotations), values)
 }
 
 func convertValue(kp kpModel.SecretValue) string {
