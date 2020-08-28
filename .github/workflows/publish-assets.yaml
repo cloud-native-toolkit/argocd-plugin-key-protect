@@ -1,0 +1,40 @@
+name: Publish assets
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  publish-assets:
+    runs-on: ubuntu-latest
+    container: golang
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - name: Install dependencies
+        run: |
+          go get -d -v ./...
+          go install -v ./...
+
+      - name: Test
+        run: |
+          go test $(find . -name "*_test.go" | grep -v vendor)
+
+      - name: Build
+        run: |
+          go build -o bin/generate-secrets
+
+      - name: Upload executable
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./bin/generate-secrets
+          asset_name: generate-secrets
+          asset_content_type: application/octet-stream

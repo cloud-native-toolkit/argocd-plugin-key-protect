@@ -1,0 +1,31 @@
+{
+  "metadata": {
+    "collectionType": "application/vnd.ibm.kms.key+json",
+    "collectionTotal":1
+  },
+  "resources": [{
+      "type": "application/vnd.ibm.kms.key+json",
+      "id": "5f2f30e5-4011-45de-b0d8-d05f058aa7b5",
+      "name": "password-keyid",
+      "state": 1,
+      "extractable": true,
+      "crn": "crn:v1:bluemix:public:kms:us-east:a/b636d1d83e34d7ae7e904591ac248cfa:7ea46943-cbaa-45ff-b799-5f67d5d38a2c:key:5f2f30e5-4011-45de-b0d8-d05f058aa7b5",
+      "imported": true,
+      "creationDate": "2020-08-27T20:52:25Z",
+      "createdBy": "IBMid-110000SNV8",
+      "algorithmType": "AES",
+      "algorithmMetadata": {
+        "bitLength": "112",
+        "mode": "CBC_PAD"
+      },
+      "algorithmBitSize": 112,
+      "algorithmMode": "CBC_PAD",
+      "lastUpdateDate": "2020-08-27T20:52:25Z",
+      "dualAuthDelete": {
+        "enabled":false
+      },
+      "deleted": false,
+      "payload": "cGFzc3dvcmQtdmFsdWU="
+    }
+  ]
+}
