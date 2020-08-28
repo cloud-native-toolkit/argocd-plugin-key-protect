@@ -25,7 +25,7 @@ jobs:
         run: |
           go test $(find . -name "*_test.go" | grep -v vendor)
 
-      - name: Build
+      - name: Build command
         run: |
           go build -ldflags "-X main.version=${{ github.event.release.tag_name }}" -o bin/generate-secrets
 
@@ -37,4 +37,19 @@ jobs:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: ./bin/generate-secrets
           asset_name: generate-secrets
+          asset_content_type: application/octet-stream
+
+      - name: Build script tar
+        run: |
+          cd hack
+          tar czf ../install-plugin.tar.gz .
+
+      - name: Upload executable
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./install-plugin.tar.gz
+          asset_name: install-plugin.tar.gz
           asset_content_type: application/octet-stream
