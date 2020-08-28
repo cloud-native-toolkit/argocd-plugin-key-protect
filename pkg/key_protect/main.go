@@ -108,3 +108,9 @@ func getAccessToken(apiKey string) string {
 
 	return result.AccessToken
 }
+
+func AddKeyProtectInstanceId(annotations *map[string]string) {
+	a := *annotations
+
+	a["key-protect.instance-id"] = LoadFromEnv().instanceId
+}
