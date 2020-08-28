@@ -8,12 +8,17 @@ import (
 	"os"
 )
 
+var (
+	version   string
+)
+
 var app = cli.NewApp()
 
 func main() {
 	app := &cli.App{
 		Name: "generate-secret",
 		Usage: "Generates secrets populated with values from Key Protect",
+		Version: version,
 		Action: func(c *cli.Context) error {
 			path, err := os.Getwd()
 			if err != nil {

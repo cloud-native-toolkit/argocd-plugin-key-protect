@@ -27,7 +27,7 @@ jobs:
 
       - name: Build
         run: |
-          go build -o bin/generate-secrets
+          go build -ldflags "-X main.version=${{ github.event.release.tag_name }}" -o bin/generate-secrets
 
       - name: Upload executable
         uses: actions/upload-release-asset@v1
