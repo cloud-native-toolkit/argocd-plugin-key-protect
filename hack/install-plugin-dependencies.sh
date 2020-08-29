@@ -10,4 +10,5 @@ fi
 
 DEPLOYMENT="deployments/argocd-repo-server"
 
+echo "Patching ${DEPLOYMENT} in ${NAMESPACE}"
 kubectl patch "${DEPLOYMENT}" -n "${NAMESPACE}" --type json -p "$(cat "${SCRIPT_DIR}/install-plugin-dependencies-patch.json")"
