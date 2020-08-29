@@ -24,8 +24,9 @@ if [[ -n $(kubectl get argocd "${ARGOCD}" -n "${NAMESPACE}" -o jsonpath='{.spec.
 
   VALUE="$(echo "$PATCH_VALUE"; echo "$VALUE" | sed -E "s/^(.*)/    \1/g")"
 
-  echo "$VALUE"
+  echo "Installing key-protect-secret plugin via patch to argocd/${NAME} in ${NAMESPACE}"
   kubectl patch argocd "${ARGOCD}" -n "${NAMESPACE}" --type merge --patch "${VALUE}"
 else
+  echo "Installing key-protect-secret plugin via patch to argocd/${NAME} in ${NAMESPACE}"
   kubectl patch argocd "${ARGOCD}" -n "${NAMESPACE}" --type merge --patch "${PATCH_VALUE}"
 fi
