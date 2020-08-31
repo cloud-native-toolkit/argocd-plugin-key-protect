@@ -24,12 +24,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          go get -d -v ./...
-          go install -v ./...
+          make build
+          make install
 
       - name: Test
         run: |
-          go test $(find . -name "*_test.go" | grep -v vendor)
+          make test
 
   release:
     #    if: ${{ github.event_name == 'push' }}
