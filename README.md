@@ -34,6 +34,8 @@ metadata:
   name: mysecret
   annotations:
     key-manager: key-protect
+    key-protect/instanceId: instance-id
+    key-protect/region: us-east
 spec:
   labels: {}
   annotations: {}
@@ -46,7 +48,12 @@ spec:
       keyId: 36397b07-d98d-4c0b-bd7a-d6c290163684
 ``` 
 
-- The `metadata.annotations` value is optional and the only values supported currently for `key-manager` is `key-protect`
+- The `metadata.annotations` value is optional. 
+
+    - `key-manager` - the only value supported currently is `key-protect`
+    - `key-protect/instanceId` - the instance id of the key protect instance. If not provided then the `instance-id` value from the `key-protect-access` secret will be used.
+    - `key-protect/region` - the region where the key protect instance has been provisioned. If not provided then the `region` value from the `key-protect-access` secret will be used.
+    
 - The `metadata.name` value given will be used as the name for the Secret that will be generated.
 - The information in `spec.labels` and `spec.annotations` will be copied over as the `labels` and `annotations` in the Secret that is generated
 - The `spec.values` section contains the information that should be provided in the `data` section of the generated Secret. There are three prossible ways the values can be provided:
@@ -109,9 +116,14 @@ desired for managing the secrets. Currently only one Key Protect instance is sup
 ### Key Protect credentials
 
 In order to connect with Key Protect you will need three pieces of information:
+
 - `IBM Cloud API Key` - an API Key that has `Reader` and `ReaderPlus` access to the Key Protect instance
 - `Key Protect region` - the region where the Key Protect instance has been deployed
 - `Key Protect instance id` - the GUID of the Key Protect instance where the secrets are stored
+
+The three values can be provided in a secret named `key-protect-access` in the same namespace where ArgoCD has been deployed. As shown above,
+the region and instance id values can be provided in the SecretTemplate configuration. Additionally, the default API Key will be used
+from the `cloud-access` secret if the value is not available from the `key-protect-access` secret.
 
 #### Get the instance id for Key Protect
 
