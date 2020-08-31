@@ -24,8 +24,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          make build
-          make install
+          go mod vendor
+          go get -d -v ./...
+          go install -v ./...
 
       - name: Test
         run: |
