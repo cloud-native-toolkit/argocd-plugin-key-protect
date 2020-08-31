@@ -16,11 +16,11 @@ func GenerateSecret(kp kpModel.Secret) kubernetes.Secret {
 	values = make(map[string]string)
 	annotations = make(map[string]string)
 
-	addKeyProtectInstanceId(&annotations)
+	addKeyProtectInstanceId(&annotations, kp.Metadata.Annotations)
 
 	specValues := kp.Spec.Values
 	for _, kps := range specValues {
-		values[kps.Name] = convertValue(kps, &annotations)
+		values[kps.Name] = convertValue(kps, &annotations, kp.Metadata.Annotations)
 	}
 
 	mergo.Merge(&annotations, kp.Spec.Annotations)
@@ -28,11 +28,11 @@ func GenerateSecret(kp kpModel.Secret) kubernetes.Secret {
 	return kubernetes.New(metadata.New(kp.Metadata.Name, kp.Spec.Labels, annotations), values)
 }
 
-func convertValue(kp kpModel.SecretValue, annotations *map[string]string) string {
+func convertValue(kp kpModel.SecretValue, annotations *map[string]string, config map[string]string) string {
 	var result string
 
 	if kp.KeyId != "" {
-		result = lookupValueFromKeyProtect(kp.KeyId)
+		result = lookupValueFromKeyProtect(kp.KeyId, config)
 
 		a := *annotations
 
@@ -46,10 +46,10 @@ func convertValue(kp kpModel.SecretValue, annotations *map[string]string) string
 	return result
 }
 
-func lookupValueFromKeyProtect(keyId string) string {
-	return kp.GetKey(keyId)
+func lookupValueFromKeyProtect(keyId string, config map[string]string) string {
+	return kp.GetKey(kp.BuildConfig(config), keyId)
 }
 
-func addKeyProtectInstanceId(annotations *map[string]string) {
-	kp.AddKeyProtectInstanceId(annotations)
+func addKeyProtectInstanceId(secretAnnotations *map[string]string, config map[string]string) {
+	kp.PopulateMetadata(secretAnnotations, kp.BuildConfig(config))
 }

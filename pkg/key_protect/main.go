@@ -32,17 +32,32 @@ func NewConfig(apiKey string, instanceId string, region string) KeyProtectConfig
 	return KeyProtectConfig{apiKey, instanceId, region}
 }
 
+func BuildConfig(config map[string]string) KeyProtectConfig {
+	instanceId, instanceIdOk := config["key-protect/instanceId"]
+	if !instanceIdOk {
+		instanceId = os.Getenv("KP_INSTANCE_ID")
+	}
+
+	region, regionOk := config["key-protect/region"]
+	if !regionOk {
+		region = os.Getenv("REGION")
+	}
+
+	apiKey, apiKeyOk := os.LookupEnv("KP_API_KEY")
+	if !apiKeyOk {
+		apiKey = os.Getenv("API_KEY")
+	}
+
+	return NewConfig(apiKey, instanceId, region)
+}
+
 func LoadFromEnv() KeyProtectConfig {
-	c := NewConfig(os.Getenv("API_KEY"), os.Getenv("KP_INSTANCE_ID"), os.Getenv("REGION"))
+	config := make(map[string]string)
 
-	return c
+	return BuildConfig(config)
 }
 
-func GetKey(keyId string) string {
-	return GetKeyWithConfig(LoadFromEnv(), keyId)
-}
-
-func GetKeyWithConfig(config KeyProtectConfig, keyId string) string {
+func GetKey(config KeyProtectConfig, keyId string) string {
 	accessToken := getAccessToken(config.apiKey)
 
 	url := fmt.Sprintf("https://%s.kms.cloud.ibm.com/api/v2/keys/%s", config.region, keyId)
@@ -109,8 +124,9 @@ func getAccessToken(apiKey string) string {
 	return result.AccessToken
 }
 
-func AddKeyProtectInstanceId(annotations *map[string]string) {
+func PopulateMetadata(annotations *map[string]string, config KeyProtectConfig) {
 	a := *annotations
 
-	a["key-protect.instance-id"] = LoadFromEnv().instanceId
+	a["key-protect/instanceId"] = config.instanceId
+	a["key-protect/region"] = config.region
 }
