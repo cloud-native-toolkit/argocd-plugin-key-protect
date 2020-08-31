@@ -22,7 +22,7 @@ go-clean:
 	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go clean
 
 go-test:
-	@echo "  >  Testing code"
+	@echo "  >  Testing code: $(GOTESTS)"
 	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go test $(GOTESTS)
 
 ## install: Install missing dependencies. Runs `go get` internally.

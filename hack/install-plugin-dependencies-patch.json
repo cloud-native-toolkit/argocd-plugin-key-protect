@@ -49,11 +49,20 @@
       }
     }
   }, {
-    "name": "API_KEY",
+    "name": "KP_API_KEY",
     "valueFrom": {
       "secretKeyRef": {
         "name": "key-protect-access",
         "key": "api-key",
+        "optional": true
+      }
+    }
+  }, {
+    "name": "API_KEY",
+    "valueFrom": {
+      "secretKeyRef": {
+        "name": "cloud-access",
+        "key": "APIKEY",
         "optional": true
       }
     }
