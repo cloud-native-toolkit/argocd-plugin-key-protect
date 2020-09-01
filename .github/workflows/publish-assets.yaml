@@ -18,12 +18,13 @@ jobs:
 
       - name: Install dependencies
         run: |
+          go mod vendor
           go get -d -v ./...
           go install -v ./...
 
       - name: Test
         run: |
-          go test $(find . -name "*_test.go" | grep -v vendor)
+          make test
 
       - name: Build command
         run: |
