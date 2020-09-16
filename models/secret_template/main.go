@@ -1,29 +1,29 @@
 package secret_template
 
 import (
-	"github.com/ibm-garage-cloud/argocd-plugin-key-protect/models/metadata"
 	"gopkg.in/yaml.v2"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"log"
 )
 
 type SecretTemplateValue struct {
-	Name string
-	Value string `yaml:"value,omitempty"`
-	B64Value string `yaml:"b64value,omitempty"`
-	KeyId string `yaml:"keyId,omitempty"`
+	Name string `json:"name" yaml:"name"`
+	Value string `json:"value,omitempty" yaml:"value,omitempty"`
+	B64Value string `json:"b64value,omitempty" yaml:"b64value,omitempty"`
+	KeyId string `json:"keyId,omitempty" yaml:"keyId,omitempty"`
 }
 
 type SecretTemplateSpec struct {
-	Labels map[string]string `yaml:"labels,omitempty"`
-	Annotations map[string]string `yaml:"annotations,omitempty"`
-	Values []SecretTemplateValue
+	Labels map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
+	Annotations map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
+	Values []SecretTemplateValue `json:"values" yaml:"value"`
 }
 
 type SecretTemplate struct {
-	ApiVersion string
-	Kind       string
-	Metadata   metadata.Metadata
-	Spec       SecretTemplateSpec
+	metav1.TypeMeta   `json:",inline" yaml:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty" yaml:"metadata,omitempty"`
+
+	Spec  SecretTemplateSpec `json:"spec" yaml:"spec"`
 }
 
 func FromYaml(data []byte) SecretTemplate {

@@ -1,20 +1,39 @@
 package generate_secrets_from_files
 
 import (
+	"fmt"
 	"github.com/ibm-garage-cloud/argocd-plugin-key-protect/models/secret_template"
-	"github.com/ibm-garage-cloud/argocd-plugin-key-protect/models/kubernetes"
 	"github.com/ibm-garage-cloud/argocd-plugin-key-protect/pkg/generate_secrets"
+	"gopkg.in/yaml.v2"
 	"io/ioutil"
+	corev1 "k8s.io/api/core/v1"
 	"os"
 	"path/filepath"
 )
 
+func secretsAsYaml(secrets *[]corev1.Secret) string {
+	var result string
+
+	result = ""
+
+	for _, s := range *secrets {
+		d, err := yaml.Marshal(&s)
+		if err != nil {
+			panic(err)
+		}
+
+		result = fmt.Sprintf("%s---\n%s\n", result, string(d))
+	}
+
+	return result
+}
+
 func GenerateSecretsFromFiles(rootPath string) string {
 	kpSecrets := readYamlFiles(rootPath)
 
-	secrets := generate_secrets.GenerateSecrets(kpSecrets)
+	secrets := generate_secrets.GenerateSecrets(&kpSecrets)
 
-	return kubernetes.AsYaml(secrets)
+	return secretsAsYaml(secrets)
 }
 
 func readYamlFiles(rootPath string) []secret_template.SecretTemplate {

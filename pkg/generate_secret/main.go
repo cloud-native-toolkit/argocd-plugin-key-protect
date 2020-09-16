@@ -1,50 +1,70 @@
 package generate_secret
 
 import (
-	kpModel "github.com/ibm-garage-cloud/argocd-plugin-key-protect/models/secret_template"
-	"github.com/ibm-garage-cloud/argocd-plugin-key-protect/models/kubernetes"
-	"github.com/ibm-garage-cloud/argocd-plugin-key-protect/models/metadata"
-	"github.com/ibm-garage-cloud/argocd-plugin-key-protect/pkg/key_management"
-	"github.com/ibm-garage-cloud/argocd-plugin-key-protect/pkg/key_management/factory"
 	"encoding/base64"
 	"fmt"
+	kpModel "github.com/ibm-garage-cloud/argocd-plugin-key-protect/models/secret_template"
+	"github.com/ibm-garage-cloud/argocd-plugin-key-protect/pkg/key_management"
+	"github.com/ibm-garage-cloud/argocd-plugin-key-protect/pkg/key_management/factory"
 	"github.com/imdario/mergo"
+	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-func GenerateSecret(kp kpModel.SecretTemplate) kubernetes.Secret {
-	var values map[string]string
+func newMetadata(name string, labels *map[string]string, annotations *map[string]string) *metav1.ObjectMeta {
+	return &metav1.ObjectMeta{
+		Name: name,
+		Labels: *labels,
+		Annotations: *annotations,
+	}
+}
+
+func newSecret(metadata *metav1.ObjectMeta, data *map[string][]byte) *corev1.Secret {
+	return &corev1.Secret{
+		ObjectMeta: *metadata,
+		Data: *data,
+	}
+}
+
+func GenerateSecret(secretTemplate *kpModel.SecretTemplate) *corev1.Secret {
+	var values map[string][]byte
 	var annotations map[string]string
 
-	values = make(map[string]string)
+	values = make(map[string][]byte)
 	annotations = make(map[string]string)
 
-	keyManager := factory.LoadKeyManager(kp.Metadata.Annotations)
+	kp := *secretTemplate
 
-	keyManager.PopulateMetadata(&annotations)
+	keyManager := factory.LoadKeyManager(kp.ObjectMeta.Annotations)
+
+	(*keyManager).PopulateMetadata(&annotations)
 
 	specValues := kp.Spec.Values
 	for _, kps := range specValues {
-		values[kps.Name] = convertValue(keyManager, kps, &annotations)
+		values[kps.Name] = convertValue(keyManager, &kps, &annotations)
 	}
 
 	mergo.Merge(&annotations, kp.Spec.Annotations)
 
-	return kubernetes.New(metadata.New(kp.Metadata.Name, kp.Spec.Labels, annotations), values)
+	return newSecret(newMetadata(kp.ObjectMeta.Name, &kp.Spec.Labels, &annotations), &values)
 }
 
-func convertValue(keyManager key_management.KeyManager, kp kpModel.SecretTemplateValue, annotations *map[string]string, ) string {
-	var result string
+func convertValue(keyManager *key_management.KeyManager, keyValue *kpModel.SecretTemplateValue, annotations *map[string]string) []byte {
+	var result []byte
+
+	km := *keyManager
+	kp := *keyValue
 
 	if kp.KeyId != "" {
-		result = keyManager.GetKey(kp.KeyId)
+		result = []byte(km.GetKey(kp.KeyId))
 
 		a := *annotations
 
-		a[fmt.Sprintf("%s.keyId/%s", keyManager.Id(), kp.Name)] = kp.KeyId
+		a[fmt.Sprintf("%s.keyId/%s", km.Id(), kp.Name)] = kp.KeyId
 	} else if kp.Value != "" {
-		result = base64.StdEncoding.EncodeToString([]byte(kp.Value))
+		result = []byte(base64.StdEncoding.EncodeToString([]byte(kp.Value)))
 	} else {
-		result = kp.B64Value
+		result = []byte(kp.B64Value)
 	}
 
 	return result
