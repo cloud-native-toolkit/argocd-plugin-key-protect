@@ -1,4 +1,4 @@
-module argocd-plugin-key-protect
+module github.com/ibm-garage-cloud/argocd-plugin-key-protect
 
 go 1.14
 

@@ -1,7 +1,7 @@
 package kubernetes
 
 import (
-	"argocd-plugin-key-protect/models/metadata"
+	"github.com/ibm-garage-cloud/argocd-plugin-key-protect/models/metadata"
 	"fmt"
 	"gopkg.in/yaml.v2"
 )

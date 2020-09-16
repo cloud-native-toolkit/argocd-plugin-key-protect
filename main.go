@@ -1,7 +1,7 @@
 package main
 
 import (
-	"argocd-plugin-key-protect/pkg/generate_secrets_from_files"
+	"github.com/ibm-garage-cloud/argocd-plugin-key-protect/pkg/generate_secrets_from_files"
 	"fmt"
 	cli "github.com/urfave/cli/v2"
 	"log"
