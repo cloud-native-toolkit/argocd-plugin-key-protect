@@ -6,7 +6,7 @@ import (
 	"github.com/ibm-garage-cloud/argocd-plugin-key-protect/pkg/generate_secret"
 )
 
-func GenerateSecrets(kp []kpModel.Secret) []kubernetes.Secret {
+func GenerateSecrets(kp []kpModel.SecretTemplate) []kubernetes.Secret {
 	var results []kubernetes.Secret
 
 	results = []kubernetes.Secret{}

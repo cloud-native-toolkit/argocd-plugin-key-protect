@@ -1,7 +1,7 @@
 package secret_template
 
 import (
-	"github.com/ibm-garage-cloud/argocd-plugin-key-protect/util/test_support"
+	testSupport "github.com/ibm-garage-cloud/argocd-plugin-key-protect/util/test_support"
 	"io/ioutil"
 	"testing"
 )
@@ -20,7 +20,7 @@ func TestFromYaml(t *testing.T) {
 	}
 
 	got := FromYaml(yamlBytes)
-	test_support.ExpectEqual(t, "mysecret", got.Metadata.Name)
-	test_support.ExpectNotEmpty(t, &got.Metadata.Annotations, "annotations")
-	test_support.ExpectEqualInt(t, len(got.Spec.Values), 3)
+	testSupport.ExpectEqual(t, "mysecret", got.Metadata.Name)
+	testSupport.ExpectNotEmpty(t, &got.Metadata.Annotations, "annotations")
+	testSupport.ExpectEqualInt(t, len(got.Spec.Values), 3)
 }

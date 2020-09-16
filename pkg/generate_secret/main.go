@@ -11,7 +11,7 @@ import (
 	"github.com/imdario/mergo"
 )
 
-func GenerateSecret(kp kpModel.Secret) kubernetes.Secret {
+func GenerateSecret(kp kpModel.SecretTemplate) kubernetes.Secret {
 	var values map[string]string
 	var annotations map[string]string
 
@@ -32,7 +32,7 @@ func GenerateSecret(kp kpModel.Secret) kubernetes.Secret {
 	return kubernetes.New(metadata.New(kp.Metadata.Name, kp.Spec.Labels, annotations), values)
 }
 
-func convertValue(keyManager key_management.KeyManager, kp kpModel.SecretValue, annotations *map[string]string, ) string {
+func convertValue(keyManager key_management.KeyManager, kp kpModel.SecretTemplateValue, annotations *map[string]string, ) string {
 	var result string
 
 	if kp.KeyId != "" {

@@ -1,8 +1,8 @@
 package kubernetes
 
 import (
-	metadata2 "github.com/ibm-garage-cloud/argocd-plugin-key-protect/models/metadata"
-	"github.com/ibm-garage-cloud/argocd-plugin-key-protect/util/test_support"
+	"github.com/ibm-garage-cloud/argocd-plugin-key-protect/models/metadata"
+	testSupport "github.com/ibm-garage-cloud/argocd-plugin-key-protect/util/test_support"
 	"testing"
 )
 
@@ -17,7 +17,7 @@ func TestAsYaml(t *testing.T) {
 	name := "test"
 	labels := make(map[string]string)
 	annotations := make(map[string]string)
-	metadata := metadata2.New(name, labels, annotations)
+	metadata := metadata.New(name, labels, annotations)
 
 	values := make(map[string]string)
 
@@ -34,5 +34,5 @@ data:
 `
 
 	got := AsYaml(secrets)
-	test_support.ExpectEqual(t, expected, got)
+	testSupport.ExpectEqual(t, expected, got)
 }

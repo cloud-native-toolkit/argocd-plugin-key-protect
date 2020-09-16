@@ -17,7 +17,7 @@ func GenerateSecretsFromFiles(rootPath string) string {
 	return kubernetes.AsYaml(secrets)
 }
 
-func readYamlFiles(rootPath string) []secret_template.Secret {
+func readYamlFiles(rootPath string) []secret_template.SecretTemplate {
 	yamlFiles := listYamlFiles(rootPath)
 
 	return readFilesAsSecrets(yamlFiles)
@@ -39,10 +39,10 @@ func listYamlFiles(root string) []string {
 	return files
 }
 
-func readFilesAsSecrets(paths []string) []secret_template.Secret {
-	var result []secret_template.Secret
+func readFilesAsSecrets(paths []string) []secret_template.SecretTemplate {
+	var result []secret_template.SecretTemplate
 
-	result = []secret_template.Secret{}
+	result = []secret_template.SecretTemplate{}
 
 	for _, path := range paths {
 		result = append(result, readFileAsSecret(path))
@@ -51,7 +51,7 @@ func readFilesAsSecrets(paths []string) []secret_template.Secret {
 	return result
 }
 
-func readFileAsSecret(path string) secret_template.Secret {
+func readFileAsSecret(path string) secret_template.SecretTemplate {
 	dat, err := ioutil.ReadFile(path)
 	if err != nil {
 		panic(err)
