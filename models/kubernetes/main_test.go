@@ -1,8 +1,8 @@
 package kubernetes
 
 import (
-	metadata2 "argocd-plugin-key-protect/models/metadata"
-	"argocd-plugin-key-protect/util/test_support"
+	metadata2 "github.com/ibm-garage-cloud/argocd-plugin-key-protect/models/metadata"
+	"github.com/ibm-garage-cloud/argocd-plugin-key-protect/util/test_support"
 	"testing"
 )
 

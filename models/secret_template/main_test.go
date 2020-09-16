@@ -1,7 +1,7 @@
 package secret_template
 
 import (
-	"argocd-plugin-key-protect/util/test_support"
+	"github.com/ibm-garage-cloud/argocd-plugin-key-protect/util/test_support"
 	"io/ioutil"
 	"testing"
 )
