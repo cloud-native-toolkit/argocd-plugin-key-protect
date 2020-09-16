@@ -1,9 +1,9 @@
 package generate_secrets_from_files
 
 import (
-	"argocd-plugin-key-protect/models/keyprotect_secret"
-	"argocd-plugin-key-protect/models/kubernetes"
-	"argocd-plugin-key-protect/pkg/generate_secrets"
+	"github.com/ibm-garage-cloud/argocd-plugin-key-protect/models/secret_template"
+	"github.com/ibm-garage-cloud/argocd-plugin-key-protect/models/kubernetes"
+	"github.com/ibm-garage-cloud/argocd-plugin-key-protect/pkg/generate_secrets"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -17,7 +17,7 @@ func GenerateSecretsFromFiles(rootPath string) string {
 	return kubernetes.AsYaml(secrets)
 }
 
-func readYamlFiles(rootPath string) []keyprotect_secret.Secret {
+func readYamlFiles(rootPath string) []secret_template.Secret {
 	yamlFiles := listYamlFiles(rootPath)
 
 	return readFilesAsSecrets(yamlFiles)
@@ -39,10 +39,10 @@ func listYamlFiles(root string) []string {
 	return files
 }
 
-func readFilesAsSecrets(paths []string) []keyprotect_secret.Secret {
-	var result []keyprotect_secret.Secret
+func readFilesAsSecrets(paths []string) []secret_template.Secret {
+	var result []secret_template.Secret
 
-	result = []keyprotect_secret.Secret{}
+	result = []secret_template.Secret{}
 
 	for _, path := range paths {
 		result = append(result, readFileAsSecret(path))
@@ -51,11 +51,11 @@ func readFilesAsSecrets(paths []string) []keyprotect_secret.Secret {
 	return result
 }
 
-func readFileAsSecret(path string) keyprotect_secret.Secret {
+func readFileAsSecret(path string) secret_template.Secret {
 	dat, err := ioutil.ReadFile(path)
 	if err != nil {
 		panic(err)
 	}
 
-	return keyprotect_secret.FromYaml(dat)
+	return secret_template.FromYaml(dat)
 }

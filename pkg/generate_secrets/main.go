@@ -1,9 +1,9 @@
 package generate_secrets
 
 import (
-	kpModel "argocd-plugin-key-protect/models/keyprotect_secret"
-	"argocd-plugin-key-protect/models/kubernetes"
-	"argocd-plugin-key-protect/pkg/generate_secret"
+	kpModel "github.com/ibm-garage-cloud/argocd-plugin-key-protect/models/secret_template"
+	"github.com/ibm-garage-cloud/argocd-plugin-key-protect/models/kubernetes"
+	"github.com/ibm-garage-cloud/argocd-plugin-key-protect/pkg/generate_secret"
 )
 
 func GenerateSecrets(kp []kpModel.Secret) []kubernetes.Secret {

@@ -1,4 +1,4 @@
-package keyprotect_secret
+package secret_template
 
 import (
 	"argocd-plugin-key-protect/util/test_support"

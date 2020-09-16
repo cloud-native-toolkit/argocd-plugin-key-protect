@@ -1,7 +1,7 @@
-package keyprotect_secret
+package secret_template
 
 import (
-	"argocd-plugin-key-protect/models/metadata"
+	"github.com/ibm-garage-cloud/argocd-plugin-key-protect/models/metadata"
 	"gopkg.in/yaml.v2"
 	"log"
 )
