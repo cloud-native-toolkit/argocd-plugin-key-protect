@@ -20,7 +20,7 @@ func TestFromYaml(t *testing.T) {
 	}
 
 	got := FromYaml(yamlBytes)
-	testSupport.ExpectEqual(t, "mysecret", got.Metadata.Name)
-	testSupport.ExpectNotEmpty(t, &got.Metadata.Annotations, "annotations")
+	testSupport.ExpectEqual(t, "mysecret", got.ObjectMeta.Name)
+	testSupport.ExpectNotEmpty(t, &got.ObjectMeta.Annotations, "annotations")
 	testSupport.ExpectEqualInt(t, len(got.Spec.Values), 3)
 }

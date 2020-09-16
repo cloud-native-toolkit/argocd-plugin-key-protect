@@ -6,15 +6,18 @@ import (
 	"fmt"
 )
 
-func LoadKeyManager(annotations map[string]string) key_management.KeyManager {
-	keyManager, ok := annotations["key-manager"]
+func LoadKeyManager(annotations map[string]string) *key_management.KeyManager {
+	keyManagerName, ok := annotations["key-manager"]
 	if !ok {
-		keyManager = "key-protect"
+		keyManagerName = "key-protect"
 	}
 
-	switch keyManager {
+	var keyManager key_management.KeyManager
+
+	switch keyManagerName {
 	case "key-protect":
-		return key_protect.New(annotations)
+		keyManager = key_protect.New(annotations)
+		return &keyManager
 	default:
 		fmt.Printf("Key manager not found: %s", keyManager)
 		panic("Key manager not found")
