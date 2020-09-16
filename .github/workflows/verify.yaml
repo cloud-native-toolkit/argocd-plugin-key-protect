@@ -30,8 +30,7 @@ jobs:
 
       - name: Test
         run: |
-          echo "Skipping test"
-#          make test
+          make test
 
   release:
     #    if: ${{ github.event_name == 'push' }}
