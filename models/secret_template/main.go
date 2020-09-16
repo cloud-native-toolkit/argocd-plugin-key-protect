@@ -16,14 +16,14 @@ type SecretTemplateValue struct {
 type SecretTemplateSpec struct {
 	Labels map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Annotations map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
-	Values []SecretTemplateValue `json:"values" yaml:"value"`
+	Values []SecretTemplateValue `json:"values" yaml:"values"`
 }
 
 type SecretTemplate struct {
 	metav1.TypeMeta   `json:",inline" yaml:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty" yaml:"metadata,omitempty"`
 
-	Spec  SecretTemplateSpec `json:"spec" yaml:"spec"`
+	Spec SecretTemplateSpec `json:"spec" yaml:"spec"`
 }
 
 func FromYaml(data []byte) SecretTemplate {
