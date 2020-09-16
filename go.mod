@@ -7,3 +7,7 @@ require (
 	github.com/urfave/cli/v2 v2.2.0
 	gopkg.in/yaml.v2 v2.3.0
 )
+
+replace (
+	github.com/ibm-garage-cloud/argocd-plugin-key-protect => ./
+)
