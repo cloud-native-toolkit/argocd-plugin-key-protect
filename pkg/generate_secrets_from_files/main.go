@@ -2,11 +2,14 @@ package generate_secrets_from_files
 
 import (
 	"fmt"
-	"github.com/ibm-garage-cloud/argocd-plugin-key-protect/models/secret_template"
 	"github.com/ibm-garage-cloud/argocd-plugin-key-protect/pkg/generate_secrets"
 	"gopkg.in/yaml.v2"
+	yaml2 "github.com/ghodss/yaml"
 	"io/ioutil"
+	keymanagementv1 "github.com/ibm-garage-cloud/key-management-operator/pkg/apis/keymanagement/v1"
 	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/util/json"
+	"log"
 	"os"
 	"path/filepath"
 )
@@ -17,16 +20,30 @@ func secretsAsYaml(secrets *[]corev1.Secret) string {
 	result = ""
 
 	for _, s := range *secrets {
-		d, err := yaml.Marshal(&s)
+		jsonSecret, err := json.Marshal(&s)
 		if err != nil {
 			panic(err)
 		}
 
-		result = fmt.Sprintf("%s---\n%s\n", result, string(d))
+		yamlSecret, err := yaml2.JSONToYAML(jsonSecret)
+
+		result = fmt.Sprintf("%s---\n%s\n", result, string(yamlSecret))
 	}
 
 	return result
 }
+
+func secretFromYaml(data []byte) keymanagementv1.SecretTemplate {
+	value := keymanagementv1.SecretTemplate{}
+
+	err := yaml.Unmarshal(data, &value)
+	if err != nil {
+		log.Fatalf("error: %v", err)
+	}
+
+	return value
+}
+
 
 func GenerateSecretsFromFiles(rootPath string) string {
 	kpSecrets := readYamlFiles(rootPath)
@@ -36,7 +53,7 @@ func GenerateSecretsFromFiles(rootPath string) string {
 	return secretsAsYaml(secrets)
 }
 
-func readYamlFiles(rootPath string) []secret_template.SecretTemplate {
+func readYamlFiles(rootPath string) []keymanagementv1.SecretTemplate {
 	yamlFiles := listYamlFiles(rootPath)
 
 	return readFilesAsSecrets(yamlFiles)
@@ -58,10 +75,10 @@ func listYamlFiles(root string) []string {
 	return files
 }
 
-func readFilesAsSecrets(paths []string) []secret_template.SecretTemplate {
-	var result []secret_template.SecretTemplate
+func readFilesAsSecrets(paths []string) []keymanagementv1.SecretTemplate {
+	var result []keymanagementv1.SecretTemplate
 
-	result = []secret_template.SecretTemplate{}
+	result = []keymanagementv1.SecretTemplate{}
 
 	for _, path := range paths {
 		result = append(result, readFileAsSecret(path))
@@ -70,11 +87,11 @@ func readFilesAsSecrets(paths []string) []secret_template.SecretTemplate {
 	return result
 }
 
-func readFileAsSecret(path string) secret_template.SecretTemplate {
+func readFileAsSecret(path string) keymanagementv1.SecretTemplate {
 	dat, err := ioutil.ReadFile(path)
 	if err != nil {
 		panic(err)
 	}
 
-	return secret_template.FromYaml(dat)
+	return secretFromYaml(dat)
 }
