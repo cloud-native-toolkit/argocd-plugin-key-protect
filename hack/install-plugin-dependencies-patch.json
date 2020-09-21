@@ -17,7 +17,7 @@
     }],
     "command": ["sh", "-c"],
     "args": [
-      "curl -Lo /tmp/jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 && chmod +x /tmp/jq && LATEST_RELEASE=$(curl -Ls https://api.github.com/repos/ibm-garage-cloud/argocd-plugin-key-protect/releases/latest | /tmp/jq -r '.tag_name') && curl -Lo /key-protect/generate-secrets https://github.com/ibm-garage-cloud/argocd-plugin-key-protect/releases/download/${LATEST_RELEASE}/generate-secrets && chmod +x /key-protect/generate-secrets"
+      "curl -Lo /tmp/jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 && chmod +x /tmp/jq && LATEST_RELEASE=$(curl -Ls https://api.github.com/repos/ibm-garage-cloud/argocd-plugin-key-protect/releases/latest | /tmp/jq -r '.tag_name') && echo \"Installing cli version: ${LATEST_RELEASE}\" && curl -Lo /key-protect/generate-secrets https://github.com/ibm-garage-cloud/argocd-plugin-key-protect/releases/download/${LATEST_RELEASE}/generate-secrets && chmod +x /key-protect/generate-secrets"
     ]
   }
 }, {
