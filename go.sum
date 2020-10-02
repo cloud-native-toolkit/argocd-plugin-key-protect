@@ -465,6 +465,10 @@ github.com/ibm-garage-cloud/key-management-operator v0.9.4 h1:GRSHJhSeq/gz5bbu4c
 github.com/ibm-garage-cloud/key-management-operator v0.9.4/go.mod h1:koswTuo7QNrXaxHzjfgti9aJXJpIdFhwXKn8S6CawDI=
 github.com/ibm-garage-cloud/key-management-operator v0.10.0 h1:uzaTGNySx63pS5lbMBxSk1Iy2PwO1uwy7YyRLhPiWIE=
 github.com/ibm-garage-cloud/key-management-operator v0.10.0/go.mod h1:gvQbRoxM1/gNQioQbeOyHUOcLNHX9CPFFeFctFBG2JQ=
+github.com/ibm-garage-cloud/key-management-operator v0.10.1 h1:NPq0W8ZgoxKD0OHdlJiHS9OPBRPYeG4NLVANfp0Dn/c=
+github.com/ibm-garage-cloud/key-management-operator v0.10.1/go.mod h1:gvQbRoxM1/gNQioQbeOyHUOcLNHX9CPFFeFctFBG2JQ=
+github.com/ibm-garage-cloud/key-management-operator v0.10.2 h1:G2RZBPTz6uBxpBQlXrrYn7GMkySjdCw5kbHf0Jm9FNE=
+github.com/ibm-garage-cloud/key-management-operator v0.10.2/go.mod h1:gvQbRoxM1/gNQioQbeOyHUOcLNHX9CPFFeFctFBG2JQ=
 github.com/imdario/mergo v0.3.5/go.mod h1:2EnlNZ0deacrJVfApfmtdGgDfMuh/nq6Ok1EcJh5FfA=
 github.com/imdario/mergo v0.3.6/go.mod h1:2EnlNZ0deacrJVfApfmtdGgDfMuh/nq6Ok1EcJh5FfA=
 github.com/imdario/mergo v0.3.7/go.mod h1:2EnlNZ0deacrJVfApfmtdGgDfMuh/nq6Ok1EcJh5FfA=
