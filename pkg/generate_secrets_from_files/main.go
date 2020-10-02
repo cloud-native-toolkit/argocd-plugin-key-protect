@@ -7,7 +7,7 @@ import (
 	"gopkg.in/yaml.v2"
 	"k8s.io/apimachinery/pkg/util/json"
 	"io/ioutil"
-	keymanagementv1 "github.com/ibm-garage-cloud/key-management-operator/pkg/apis/keymanagement/v1"
+	keymanagementv1 "github.com/ibm-garage-cloud/key-management-operator/api/v1"
 	corev1 "k8s.io/api/core/v1"
 	"log"
 	"os"

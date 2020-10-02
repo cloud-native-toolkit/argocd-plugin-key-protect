@@ -1,8 +1,8 @@
 package generate_secrets
 
 import (
-	keymanagementv1 "github.com/ibm-garage-cloud/key-management-operator/pkg/apis/keymanagement/v1"
-	generate_secret "github.com/ibm-garage-cloud/key-management-operator/pkg/service/generate_secret"
+	keymanagementv1 "github.com/ibm-garage-cloud/key-management-operator/api/v1"
+	generate_secret "github.com/ibm-garage-cloud/key-management-operator/service/generate_secret"
 	corev1 "k8s.io/api/core/v1"
 )
 
