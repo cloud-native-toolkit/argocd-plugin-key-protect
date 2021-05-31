@@ -8,6 +8,11 @@ if [[ -z "${NAMESPACE}" ]]; then
   exit 1
 fi
 
-RESOURCE="deployments/argocd-repo-server"
+NAME="$2"
+if [[ -z "${NAME}" ]]; then
+  NAME="argocd"
+fi
+
+RESOURCE="deployments/${NAME}-repo-server"
 
 kubectl patch "${RESOURCE}" -n "${NAMESPACE}" --type json -p "$(cat "${SCRIPT_DIR}/uninstall-plugin-dependencies-patch.json")"

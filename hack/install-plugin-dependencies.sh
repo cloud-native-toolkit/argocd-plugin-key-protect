@@ -8,7 +8,12 @@ if [[ -z "${NAMESPACE}" ]]; then
   exit 1
 fi
 
-DEPLOYMENT="deployments/argocd-repo-server"
+NAME="$2"
+if [[ -z "${NAME}" ]]; then
+  NAME="argocd"
+fi
+
+DEPLOYMENT="deployments/${NAME}-repo-server"
 
 echo "Patching ${DEPLOYMENT} in ${NAMESPACE}"
 kubectl patch "${DEPLOYMENT}" -n "${NAMESPACE}" --type json -p "$(cat "${SCRIPT_DIR}/install-plugin-dependencies-patch.json")"

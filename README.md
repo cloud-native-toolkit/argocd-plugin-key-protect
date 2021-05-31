@@ -176,13 +176,14 @@ A script has been provided to simplify this step. To install the dependencies do
 
     ```shell script
     NAMESPACE="tools"
-    ./hack/install-plugin-dependencies.sh ${NAMESPACE}
+    ./hack/install-plugin-dependencies.sh ${NAMESPACE} [${NAME}]
     ```
    
    where:
    - `NAMESPACE` is the namespace where ArgoCD has been deployed
+   - `NAME` is the name of the ArgoCD instance. If not provided defaults to `argocd`
 
-When this script has completed, you should notice several new elements in the `argocd-repo-server` deployment:
+When this script has completed, you should notice several new elements in the `${NAME}-repo-server` deployment:
 
 - A new volume named `key-protect-install` defined in the `volumes` section
 - A new initContainer named `key-protect-install`
